@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("twitter.api.data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87b4ae5f7c4f9374e65ae046a673d3dd65da1639")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+098028908bd4a2b44ce3790cf1d8bcddf914ccbd")]
 [assembly: System.Reflection.AssemblyProductAttribute("twitter.api.data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("twitter.api.data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
