@@ -1,13 +1,15 @@
-﻿namespace twitter.api.application.Services.Abstractions
+﻿using twitter.api.domain.Models;
+
+namespace twitter.api.application.Services.Abstractions
 {
     public interface IPostService
     {
         /// <summary>
         /// Creates a post.
         /// </summary>
-        /// <param name="userId">The user who creates the post.</param>
+        /// <param name="creatorId">The user who creates the post.</param>
         /// <param name="description">The post description.</param>
         /// <returns></returns>
-        Task CreatePost(Guid userId, string description);
+        Task<Post> CreatePost(Guid creatorId, string description);
     }
 }

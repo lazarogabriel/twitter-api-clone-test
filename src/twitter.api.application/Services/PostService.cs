@@ -1,4 +1,9 @@
-﻿using twitter.api.application.Services.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using twitter.api.application.Services.Abstractions;
+using twitter.api.data.DbContexts;
+using twitter.api.domain.Constants;
+using twitter.api.domain.Exceptions;
+using twitter.api.domain.Models;
 
 namespace twitter.api.application.Services
 {
@@ -6,13 +11,13 @@ namespace twitter.api.application.Services
     {
         #region Fields
 
-        private readonly TwitterApiDbContext _dbContext;
+        private readonly ITwitterApiDbContext _dbContext;
 
         #endregion
 
         #region Constructor
 
-        public PostService(TwitterApiDbContext dbContext)
+        public PostService(ITwitterApiDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,19 +27,20 @@ namespace twitter.api.application.Services
         #region Public Methods
 
         /// <inheritdoc />
-        public Task<Post> CreatePost(Guid userId, string description)
+        public async Task<Post> CreatePost(Guid creatorId, string description)
         {
-            var post = new Post(description);
-
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == issuerId);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == creatorId);
 
             if (user is null)
             {
                 throw new NotFoundException(Errors.UserNotFound);
             }
 
-            user.AddPost(post);
+            var post = user.CreatePost(description);
 
+            await _dbContext.Posts.AddAsync(post);
+            await _dbContext.CommitAsync();
+            
             return post;
         }
 
