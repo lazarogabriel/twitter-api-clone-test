@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using twitter.api.domain.Constants;
 using twitter.api.domain.Exceptions;
 namespace twitter.api.domain.Models
@@ -13,10 +14,19 @@ namespace twitter.api.domain.Models
 
         #region Constructor
 
+        /// <summary>
+        /// Ef core constructor.
+        /// </summary>
+        public Post()
+        {
+            
+        }
+
         public Post(string description, User creator)
         {
             Description = description;
             Creator = creator;
+            CreatedAt = DateTime.UtcNow;
         }
 
         #endregion
@@ -47,6 +57,8 @@ namespace twitter.api.domain.Models
                 _description = trimmedValue;
             } 
         }
+
+        public DateTime CreatedAt { get; }
 
         #endregion
     }

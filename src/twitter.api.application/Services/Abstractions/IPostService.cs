@@ -1,4 +1,6 @@
-﻿using twitter.api.domain.Models;
+﻿using System;
+using System.Threading.Tasks;
+using twitter.api.domain.Models;
 
 namespace twitter.api.application.Services.Abstractions
 {

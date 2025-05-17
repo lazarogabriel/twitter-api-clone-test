@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
+using twitter.api.data.EntityConfigurations;
 using twitter.api.domain.Models;
 
 namespace twitter.api.data.DbContexts
@@ -7,7 +10,7 @@ namespace twitter.api.data.DbContexts
     {
         #region Constructor
 
-        public TwitterApiDbContext(DbContextOptions options) : base(options)
+        public TwitterApiDbContext(DbContextOptions<TwitterApiDbContext> options) : base(options)
         {
         }
 
@@ -20,8 +23,18 @@ namespace twitter.api.data.DbContexts
         public DbSet<User> Users { get; set; }
 
         public DbSet<FollowRelationship> FollowRelationships { get ; set; }
-        
+
         #endregion
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder
+               .ApplyConfiguration(new UserEntityTypeConfig())
+               .ApplyConfiguration(new FollowRelationshipEntityTypeConfig())
+               .ApplyConfiguration(new PostEntityTypeConfig());
+        }
 
         #region Public Methods
 

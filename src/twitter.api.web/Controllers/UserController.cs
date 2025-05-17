@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using twitter.api.application.Services.Abstractions;
-using twitter.api.domain.Models;
-using twitter.api.web.Models;
+using twitter.api.web.Models.Responses;
 
 namespace twitter.api.web.Controllers
 {
@@ -50,8 +47,8 @@ namespace twitter.api.web.Controllers
 
             return CreatedAtAction(
                 nameof(GetFollower),
-                routeValues: new { id = followRelationship.Id },
-                _mapper.Map<FollowRelationshipResponse>(followRelationship));
+                routeValues: new { id = followRelationship.FollowedId },
+                _mapper.Map<CreateFollowerResponse>(followRelationship));
         }
 
         /// <summary>
@@ -59,7 +56,7 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="userId">The person who's bieng unfollowed.</param>
         /// <returns></returns>
-        [HttpPost("{userId}/Followers")]
+        [HttpDelete("{userId}/Followers")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteFollower([FromBody] Guid userId)
         {

@@ -7,6 +7,14 @@ namespace twitter.api.domain.Models
     /// </summary>
     public class FollowRelationship
     {
+        /// <summary>
+        /// Ef constructor.
+        /// </summary>
+        public FollowRelationship()
+        {
+            
+        }
+
         public FollowRelationship(User follower, User followed)
         {
             Follower = follower;
@@ -15,8 +23,6 @@ namespace twitter.api.domain.Models
         }
 
         #region Properties
-
-        public Guid Id { get; }
 
         /// <summary>
         /// The user who follows.
@@ -32,6 +38,16 @@ namespace twitter.api.domain.Models
         /// When the follow happen.
         /// </summary>
         public DateTime FollowedAt { get; }
+
+        /// <summary>
+        /// The user who follows identifier.
+        /// </summary>
+        public Guid FollowerId { get; }
+
+        /// <summary>
+        /// The user being followed identifier.
+        /// </summary>
+        public Guid FollowedId { get; }
 
         #endregion
     }

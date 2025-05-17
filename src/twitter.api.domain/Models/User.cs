@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using twitter.api.domain.Constants;
 using twitter.api.domain.Exceptions;
 
@@ -14,16 +12,29 @@ namespace twitter.api.domain.Models
     {
         #region Fields
 
-        private string _nickName;
+        private string _userName;
 
         #endregion
 
         #region Constructor
 
-        public User(string nickName)
+        /// <summary>
+        /// Ef core constructor.
+        /// </summary>
+        public User()
+        {
+            Followers = new List<FollowRelationship>();
+            Following = new List<FollowRelationship>();
+            Posts = new List<Post>();
+        }
+
+        public User(string userName)
         {
             CreatedAt = DateTime.UtcNow;
-            NickName = nickName;
+            UserName = userName;
+            Followers = new List<FollowRelationship>();
+            Following = new List<FollowRelationship>();
+            Posts = new List<Post>();
         }
 
         #endregion
@@ -34,9 +45,9 @@ namespace twitter.api.domain.Models
 
         public DateTime CreatedAt { get; }
 
-        public string NickName
+        public string UserName
         { 
-            get => _nickName; 
+            get => _userName; 
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
@@ -51,7 +62,7 @@ namespace twitter.api.domain.Models
                     throw new InvalidParameterException(Errors.UserNickNameMustBeBetween5And20CharsLength);
                 }
 
-                _nickName = trimmedValue;
+                _userName = trimmedValue;
             }
         }
 
@@ -66,7 +77,12 @@ namespace twitter.api.domain.Models
         #endregion
 
         #region Public Methods
-
+        
+        /// <summary>
+        /// Creates a post.
+        /// </summary>
+        /// <param name="description"></param>
+        /// <returns></returns>
         public Post CreatePost(string description)
         {
             var post = new Post(description: description, creator: this);
@@ -76,6 +92,12 @@ namespace twitter.api.domain.Models
             return post;
         }
 
+        /// <summary>
+        /// Starts following a user creating a relationship btw.
+        /// </summary>
+        /// <param name="userToFollow"></param>
+        /// <returns></returns>
+        /// <exception cref="ValidationException"></exception>
         public FollowRelationship Follow(User userToFollow)
         {
             if (userToFollow.Id == Id)
@@ -91,16 +113,25 @@ namespace twitter.api.domain.Models
             return followRelationship;
         }
 
-        public void Unfollow(User userToUnfollow)
+        /// <summary>
+        /// Stop following a user by removing all relationship as this user as a follower
+        /// and the followed.
+        /// </summary>
+        /// <param name="followed"></param>
+        /// <param name="relationship"></param>
+        public void Unfollow(User followed, FollowRelationship relationship)
         {
-            var followRelationship = Following.FirstOrDefault(f => f.Followed.Id == userToUnfollow.Id);
-            if (followRelationship is null)
-            {
-                throw new ValidationException(Errors.CannotUnfollowAUserThatIsNotBeingFollowed);
-            }
+            Following.Remove(relationship);
+            followed.RemoveFollower(relationship);
+        }
 
-            Following.Remove(followRelationship);
-            userToUnfollow.Followers.Remove(followRelationship);
+        /// <summary>
+        /// Removes the relationship as a user beign followed.
+        /// </summary>
+        /// <param name="relationship"></param>
+        public void RemoveFollower(FollowRelationship relationship)
+        {
+            Followers.Remove(relationship);
         }
 
         #endregion

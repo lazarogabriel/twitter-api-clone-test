@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace twitter.api.web.Models
+namespace twitter.api.web.Models.Responses
 {
     public class PostResponse
     {

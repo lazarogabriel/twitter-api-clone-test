@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 using twitter.api.domain.Models;
 
 namespace twitter.api.data.DbContexts

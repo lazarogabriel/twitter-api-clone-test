@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using System;
+using System.Threading.Tasks;
 using twitter.api.application.Services.Abstractions;
 using twitter.api.data.DbContexts;
 using twitter.api.domain.Constants;
@@ -70,16 +71,23 @@ namespace twitter.api.application.Services
         /// <inheritdoc/>
         public async Task DeleteFollower(Guid unfollowerId, Guid userToUnfollowId)
         {
-            var followRelationship = await _dbContext.FollowRelationships.FirstOrDefaultAsync(r =>
-                r.Follower.Id == unfollowerId &&
-                r.Followed.Id == userToUnfollowId);
+            var followRelationship = await _dbContext.FollowRelationships
+                .Include(f => f.Followed)
+                .FirstOrDefaultAsync(r =>
+                    r.Follower.Id == unfollowerId &&
+                    r.Followed.Id == userToUnfollowId);
+            var unfollower = followRelationship.Follower;
+            var userToUnfollow = followRelationship.Followed;
 
             if (followRelationship is null)
             {
                 throw new NotFoundException(Errors.FollowRelationshipNotFound);
             }
 
+            unfollower.Unfollow(userToUnfollow, followRelationship);
 
+            //await _dbContext.FollowRelationships.Remove(followRelationship);
+            await _dbContext.CommitAsync();
         }
 
         #endregion
