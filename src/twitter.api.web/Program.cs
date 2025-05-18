@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
-using twitter.api.data.DbContexts;
 using twitter.api.web.Extensions;
 using Microsoft.OpenApi.Models;
 
@@ -27,11 +24,13 @@ builder.Services.AddSwaggerGen(options =>
 // Adds AutoMapper.
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddDbContext<TwitterApiDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("TwitterDbContext"),
-        b => b.MigrationsAssembly("twitter.api.web"))
-    );
+// Adds Database
+builder.Services.AddTwitterDatabase(config: builder.Configuration);
+
+// Adds Authentication and authorization
+builder.Services.AddAuthorization();
+builder.Services.AddTwitterAuthentication(config: builder.Configuration);
+
 
 var app = builder.Build();
 
@@ -51,6 +50,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 

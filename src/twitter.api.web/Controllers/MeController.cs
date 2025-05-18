@@ -1,30 +1,34 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using twitter.api.application.Services.Abstractions;
+using twitter.api.web.Models;
 using twitter.api.web.Models.Responses;
 
 namespace twitter.api.web.Controllers
 {
     [ApiController]
-    [Route("Users")]
-    public class UserController : ControllerBase
+    [Route("Me")]
+    public class MeController : ControllerBase
     {
         #region Fields
 
         private readonly IUserService _userService;
+        private readonly IPostService _postService;
         private readonly IMapper _mapper;
 
         #endregion
 
         #region Constructor
 
-        public UserController(IUserService userService, IMapper mapper)
+        public MeController(IUserService userService, IMapper mapper, IPostService postService)
         {
             _userService = userService;
             _mapper = mapper;
+            _postService = postService;
         }
 
         #endregion
@@ -36,7 +40,7 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="userId">The person who's bieng followed.</param>
         /// <returns></returns>
-        [HttpPost("{userId}/Followers")]
+        [HttpPost("Followers/{userId}")]
         [ProducesResponseType(typeof(CreateFollowerResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> FollowUser(Guid userId)
         {
@@ -56,9 +60,9 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="userId">The person who's bieng unfollowed.</param>
         /// <returns></returns>
-        [HttpDelete("{userId}/Followers")]
+        [HttpDelete("Followers/{userId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteFollower([FromBody] Guid userId)
+        public async Task<IActionResult> DeleteFollower(Guid userId)
         {
             var currentUserId = "GetUserId()";
 
@@ -69,7 +73,33 @@ namespace twitter.api.web.Controllers
             return NoContent();
         }
 
-        [HttpGet("{followerId}")]
+        /// <summary>
+        /// Creates a post.
+        /// </summary>
+        /// <param name="request">Data required to create post.</param>
+        /// <returns>Post just created.</returns>
+        [HttpPost]
+        [ProducesResponseType(typeof(PostResponse), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreatePost(CreatePostRequest request)
+        {
+            var userId = "GetUserId()";
+            var post = await _postService.CreatePost(creatorId: new Guid(userId), description: request.Description);
+
+            return CreatedAtAction(
+                nameof(GetPost),
+                routeValues: new { id = post.Id },
+                _mapper.Map<PostResponse>(post));
+        }
+
+        [Authorize]
+        [HttpGet("Posts/{postId}")]
+        public async Task<IActionResult> GetPost([FromRoute] Guid postId)
+        {
+            throw new NotImplementedException("Get is not implemented yet.");
+        }
+
+
+        [HttpGet("Followers/{followerId}")]
         public async Task<IActionResult> GetFollower([FromRoute] Guid followerId)
         {
             throw new NotImplementedException("Get is not implemented yet.");
