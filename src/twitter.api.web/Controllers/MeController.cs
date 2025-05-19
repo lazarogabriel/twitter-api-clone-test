@@ -40,6 +40,7 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="userId">The person who's bieng followed.</param>
         /// <returns></returns>
+        [Authorize]
         [HttpPost("Followers/{userId}")]
         [ProducesResponseType(typeof(CreateFollowerResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> FollowUser(Guid userId)
@@ -60,6 +61,7 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="userId">The person who's bieng unfollowed.</param>
         /// <returns></returns>
+        [Authorize]
         [HttpDelete("Followers/{userId}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteFollower(Guid userId)
@@ -78,7 +80,8 @@ namespace twitter.api.web.Controllers
         /// </summary>
         /// <param name="request">Data required to create post.</param>
         /// <returns>Post just created.</returns>
-        [HttpPost]
+        [Authorize]
+        [HttpPost("Posts")]
         [ProducesResponseType(typeof(PostResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreatePost(CreatePostRequest request)
         {
@@ -99,6 +102,7 @@ namespace twitter.api.web.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("Followers/{followerId}")]
         public async Task<IActionResult> GetFollower([FromRoute] Guid followerId)
         {

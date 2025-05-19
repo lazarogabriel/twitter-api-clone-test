@@ -32,10 +32,10 @@ namespace twitter.api.web.Extensions
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
 
-                        ValidIssuer = config["Jwt:Issuer"],
-                        ValidAudience = config["Jwt:Audience"],
+                        ValidIssuer = config["Issuer"],
+                        ValidAudience = config["Audience"],
                         IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(config["Jwt:Key"]!)
+                            Encoding.UTF8.GetBytes(config["Secret"]!)
                         )
                     };
                 });

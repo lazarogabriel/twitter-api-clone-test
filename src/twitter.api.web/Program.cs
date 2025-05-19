@@ -4,8 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Scalar.AspNetCore;
 using twitter.api.web.Extensions;
 using Microsoft.OpenApi.Models;
+using twitter.api.application.Models.Security;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,12 +27,14 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAutoMapper(typeof(Program));
 
 // Adds Database
-builder.Services.AddTwitterDatabase(config: builder.Configuration);
+builder.Services.AddTwitterDatabase(config: configuration);
 
 // Adds Authentication and authorization
 builder.Services.AddAuthorization();
-builder.Services.AddTwitterAuthentication(config: builder.Configuration);
+builder.Services.AddTwitterAuthentication(config: configuration.GetSection("SecuritySettings"));
 
+// Adds Security Settings.
+builder.Services.Configure<SecurityServiceConfiguration>(configuration.GetSection("SecuritySettings"));
 
 var app = builder.Build();
 

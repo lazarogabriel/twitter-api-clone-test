@@ -65,7 +65,7 @@ namespace twitter.api.web.Extensions
                     new ErrorResponse(ex.ErrorType, ex.Message)
                 ),
                 RepeatedElementException ex => (
-                    StatusCodes.Status422UnprocessableEntity,
+                    StatusCodes.Status409Conflict,
                     new ErrorResponse(ex.ErrorType, ex.Message)
                 ),
                 NotFoundException ex => (

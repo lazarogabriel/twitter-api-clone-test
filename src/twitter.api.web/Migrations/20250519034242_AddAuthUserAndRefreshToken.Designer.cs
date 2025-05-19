@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using twitter.api.data.DbContexts;
@@ -11,9 +12,11 @@ using twitter.api.data.DbContexts;
 namespace twitter.api.web.Migrations
 {
     [DbContext(typeof(TwitterApiDbContext))]
-    partial class TwitterApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250519034242_AddAuthUserAndRefreshToken")]
+    partial class AddAuthUserAndRefreshToken
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
