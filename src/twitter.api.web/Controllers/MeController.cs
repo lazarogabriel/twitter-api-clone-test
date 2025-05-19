@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using twitter.api.application.Services.Abstractions;
+using twitter.api.web.Extensions;
 using twitter.api.web.Models;
 using twitter.api.web.Models.Responses;
 
@@ -85,12 +86,13 @@ namespace twitter.api.web.Controllers
         [ProducesResponseType(typeof(PostResponse), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreatePost(CreatePostRequest request)
         {
-            var userId = "GetUserId()";
+            var userId = User.GetSub();
+
             var post = await _postService.CreatePost(creatorId: new Guid(userId), description: request.Description);
 
             return CreatedAtAction(
                 nameof(GetPost),
-                routeValues: new { id = post.Id },
+                routeValues: new { PostId = post.Id },
                 _mapper.Map<PostResponse>(post));
         }
 

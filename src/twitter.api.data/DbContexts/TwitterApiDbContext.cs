@@ -24,6 +24,10 @@ namespace twitter.api.data.DbContexts
 
         public DbSet<FollowRelationship> FollowRelationships { get ; set; }
 
+        public DbSet<AuthUser> AuthUsers { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,7 +37,9 @@ namespace twitter.api.data.DbContexts
             modelBuilder
                .ApplyConfiguration(new UserEntityTypeConfig())
                .ApplyConfiguration(new FollowRelationshipEntityTypeConfig())
-               .ApplyConfiguration(new PostEntityTypeConfig());
+               .ApplyConfiguration(new PostEntityTypeConfig())
+               .ApplyConfiguration(new AuthUserEntityTypeConfig())
+               .ApplyConfiguration(new RefreshTokenEntityTypeConfig());
         }
 
         #region Public Methods

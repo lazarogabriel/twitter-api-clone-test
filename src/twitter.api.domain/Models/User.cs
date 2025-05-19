@@ -52,7 +52,7 @@ namespace twitter.api.domain.Models
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new InvalidParameterException(Errors.UsersNickNameShouldNotBeNullOrEmpty);
+                    throw new InvalidParameterException(Errors.UserNameIsRequired);
                 }
 
                 var trimmedValue = value.Trim();
@@ -74,10 +74,12 @@ namespace twitter.api.domain.Models
 
         public List<Post> Posts { get; }
 
+        public AuthUser AuthUser { get; }
+
         #endregion
 
         #region Public Methods
-        
+
         /// <summary>
         /// Creates a post.
         /// </summary>

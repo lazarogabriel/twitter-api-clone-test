@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using twitter.api.application.Services.Abstractions;
 using twitter.api.data.DbContexts;
@@ -31,7 +32,9 @@ namespace twitter.api.application.Services
         /// <inheritdoc />
         public async Task<Post> CreatePost(Guid creatorId, string description)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == creatorId);
+            var user = await _dbContext.Users
+                .Where(u => u.AuthUser.Id == creatorId)
+                .FirstOrDefaultAsync();
 
             if (user is null)
             {
@@ -40,7 +43,7 @@ namespace twitter.api.application.Services
 
             var post = user.CreatePost(description);
 
-            await _dbContext.Posts.AddAsync(post);
+            _dbContext.Posts.Add(post);
             await _dbContext.CommitAsync();
             
             return post;

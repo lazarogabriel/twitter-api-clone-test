@@ -23,7 +23,7 @@ namespace twitter.api.data.EntityConfigurations
                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(f => f.FollowedAt)
-                .HasColumnType("timestamp without time zone");
+                .HasColumnType("timestamp with time zone");
         }
     }
 }

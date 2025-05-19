@@ -13,6 +13,11 @@ namespace twitter.api.data.DbContexts
 
         DbSet<FollowRelationship> FollowRelationships { get; set; }
 
+        DbSet<AuthUser> AuthUsers { get; set; }
+
+        DbSet<RefreshToken> RefreshTokens { get; set; }
+
+
         #region Methods
 
         /// <summary>

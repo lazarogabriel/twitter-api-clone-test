@@ -21,7 +21,7 @@ namespace twitter.api.data.EntityConfigurations
                 .IsRequired();
 
             builder.Property(u => u.CreatedAt)
-                .HasColumnType("timestamp without time zone")
+                .HasColumnType("timestamp with time zone")
                 .IsRequired();
         }
     }
