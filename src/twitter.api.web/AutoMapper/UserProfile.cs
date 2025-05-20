@@ -9,9 +9,13 @@ namespace twitter.api.web.AutoMapper
         public UserProfile()
         {
             CreateMap<FollowRelationship, CreateFollowerResponse>()
-               .ForMember(d => d.FollowerId, o => o.MapFrom(s => s.Follower.Id))
-               .ForMember(d => d.FollowedId, o => o.MapFrom(s => s.Followed.Id))
+               .ForMember(d => d.Follower, o => o.MapFrom(s => s.Follower))
+               .ForMember(d => d.Followed, o => o.MapFrom(s => s.Followed))
                .ForMember(d => d.FollowedAt, o => o.MapFrom(s => s.FollowedAt));
+
+            CreateMap<User, BasicUserResponse>()
+               .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+               .ForMember(d => d.UserName, o => o.MapFrom(s => s.UserName));
         }
     }
 }

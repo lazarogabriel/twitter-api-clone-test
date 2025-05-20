@@ -4,12 +4,10 @@ namespace twitter.api.web.Models.Responses
 {
     public class CreateFollowerResponse
     {
-        public Guid Id { get; }
+        public BasicUserResponse Follower { get; set; }
 
-        public Guid FollowerId { get; }
+        public BasicUserResponse Followed { get; set; }
 
-        public Guid FollowedId { get; }
-
-        public DateTime FollowedAt { get; }
+        public DateTime FollowedAt { get; set; }
     }
 }

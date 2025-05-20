@@ -33,8 +33,7 @@ namespace twitter.api.application.Services
         public async Task<Post> CreatePost(Guid creatorId, string description)
         {
             var user = await _dbContext.Users
-                .Where(u => u.AuthUser.Id == creatorId)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(u => u.Id == creatorId);
 
             if (user is null)
             {

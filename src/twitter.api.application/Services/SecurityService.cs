@@ -111,6 +111,7 @@ namespace twitter.api.application.Services
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim("userId", user.UserId.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -137,7 +138,6 @@ namespace twitter.api.application.Services
         }
        
         #endregion
-
     }
 }
 

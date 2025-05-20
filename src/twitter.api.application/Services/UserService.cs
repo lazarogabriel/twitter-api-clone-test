@@ -73,16 +73,18 @@ namespace twitter.api.application.Services
         {
             var followRelationship = await _dbContext.FollowRelationships
                 .Include(f => f.Followed)
+                .Include(f => f.Follower)
                 .FirstOrDefaultAsync(r =>
                     r.Follower.Id == unfollowerId &&
                     r.Followed.Id == userToUnfollowId);
-            var unfollower = followRelationship.Follower;
-            var userToUnfollow = followRelationship.Followed;
 
             if (followRelationship is null)
             {
                 throw new NotFoundException(Errors.FollowRelationshipNotFound);
             }
+
+            var unfollower = followRelationship.Follower;
+            var userToUnfollow = followRelationship.Followed;
 
             unfollower.Unfollow(userToUnfollow, followRelationship);
 
